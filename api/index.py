@@ -1,3 +1,4 @@
+import os
 import re
 import sys
 from typing import Optional
@@ -7,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from curl_cffi import requests
+
+PROXY_URL = os.getenv("PROXY_URL") or os.getenv("HTTP_PROXY") or os.getenv("HTTPS_PROXY")
 
 app = FastAPI(
     title="TrueMoney Voucher API",
@@ -123,10 +126,18 @@ def request_truemoney(method: str, url: str, json_data: Optional[dict] = None, v
     }
 
     try:
+        kwargs = {
+            "headers": headers,
+            "impersonate": "chrome124",
+            "timeout": 15,
+        }
+        if PROXY_URL:
+            kwargs["proxy"] = PROXY_URL
+
         if method.upper() == "POST":
-            resp = requests.post(url, json=json_data, headers=headers, impersonate="chrome124", timeout=15)
+            resp = requests.post(url, json=json_data, **kwargs)
         else:
-            resp = requests.get(url, headers=headers, impersonate="chrome124", timeout=15)
+            resp = requests.get(url, **kwargs)
 
         try:
             data = resp.json()
