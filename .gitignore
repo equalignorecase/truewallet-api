@@ -1,0 +1,19 @@
+# curl-impersonate binaries
+bin/curl_chrome*
+bin/curl-impersonate*
+bin/*.tar.gz
+
+# temp files
+_tmp_b64.txt
+
+# env
+.env
+
+# Python & Vercel
+__pycache__/
+*.pyc
+.vercel
+
+# OS
+.DS_Store
+Thumbs.db
