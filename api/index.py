@@ -115,29 +115,43 @@ def extract_voucher_hash(voucher: str) -> str:
 
     return voucher
 
-def request_truemoney(method: str, url: str, json_data: Optional[dict] = None, voucher_hash: str = "") -> dict:
-    """ส่ง Request ไปยัง TrueMoney โดยใช้ curl_cffi จำลอง Chrome TLS Handshake"""
+def request_truemoney(
+    method: str,
+    url: str,
+    json_data: Optional[dict] = None,
+    voucher_hash: str = "",
+) -> dict:
+    """ส่ง Request ไปยัง TrueMoney โดยตรง ด้วย curl_cffi จำลอง Firefox TLS Handshake"""
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Origin": "https://gift.truemoney.com",
         "Referer": f"https://gift.truemoney.com/campaign/?v={voucher_hash}" if voucher_hash else "https://gift.truemoney.com/campaign/",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0",
+        "Accept-Language": "th,en-US;q=0.7,en;q=0.3",
     }
 
     try:
         kwargs = {
             "headers": headers,
-            "impersonate": "chrome124",
+            "impersonate": "firefox147",
             "timeout": 15,
         }
         if PROXY_URL:
             kwargs["proxy"] = PROXY_URL
 
-        if method.upper() == "POST":
-            resp = requests.post(url, json=json_data, **kwargs)
-        else:
-            resp = requests.get(url, **kwargs)
+        try:
+            if method.upper() == "POST":
+                resp = requests.post(url, json=json_data, **kwargs)
+            else:
+                resp = requests.get(url, **kwargs)
+        except Exception:
+            # สำรอง Firefox 133 หาก runtime ไม่รองรับ 147
+            kwargs["impersonate"] = "firefox133"
+            if method.upper() == "POST":
+                resp = requests.post(url, json=json_data, **kwargs)
+            else:
+                resp = requests.get(url, **kwargs)
 
         try:
             data = resp.json()
@@ -167,6 +181,7 @@ def request_truemoney(method: str, url: str, json_data: Optional[dict] = None, v
             "detail": str(e),
         }
 
+
 # ─── Endpoints ──────────────────────────────────────────────────────
 
 @app.get("/")
@@ -189,7 +204,7 @@ def health_check():
         "status": "ok",
         "powered_by": "equalsignorecase",
         "engine": "curl_cffi",
-        "impersonate": "chrome124",
+        "impersonate": "firefox147",
         "python_version": sys.version,
     }
 
