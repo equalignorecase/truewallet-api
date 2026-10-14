@@ -3,13 +3,13 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10+">
   <img src="https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
-  <img src="https://img.shields.io/badge/Engine-curl__cffi%20(Chrome%20124)-FF6B00?style=for-the-badge&logo=googlechrome&logoColor=white" alt="curl_cffi Chrome 124">
-  <img src="https://img.shields.io/badge/Deploy-Vercel%20Serverless%20(sin1)-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Ready">
+  <img src="https://img.shields.io/badge/Engine-curl__cffi%20(Firefox%20147)-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="curl_cffi Firefox 147">
+  <img src="https://img.shields.io/badge/Deploy-Vercel%20Serverless%20(iad1)-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Ready">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License">
   <img src="https://img.shields.io/badge/Powered%20By-equalsignorecase-8A2BE2?style=for-the-badge" alt="Powered by equalsignorecase">
 </p>
 
-<p align="center"> <b>API ประสิทธิภาพสูงสำหรับตรวจสอบ (Verify) และกดรับเงิน (Redeem) ซองของขวัญ / อั่งเปา TrueMoney Wallet เข้ากระเป๋าจริงอัตโนมัติ</b><br> พัฒนาด้วย Python (FastAPI) ผสานเทคโนโลยี <b>TLS Impersonation (Chrome 124 JA3/JA4 Handshake)</b> ผ่าน <code>curl_cffi</code><br>
+<p align="center"> <b>API ประสิทธิภาพสูงสำหรับตรวจสอบ (Verify) และกดรับเงิน (Redeem) ซองของขวัญ / อั่งเปา TrueMoney Wallet เข้ากระเป๋าจริงอัตโนมัติ</b><br> พัฒนาด้วย Python (FastAPI) ผสานเทคโนโลยี <b>TLS Impersonation (Firefox 147 JA3/JA4 Handshake)</b> ผ่าน <code>curl_cffi</code><br>
   บายพาสระบบตรวจจับ Cloudflare Bot Protection 100% ไม่ต้องติดตั้ง Binary เสริม รองรับ Vercel Serverless ฟรี 24/7
 </p>
 
@@ -31,7 +31,7 @@
 - [ตารางรหัสสถานะ TrueMoney (Status Codes)](#-ตารางรหัสสถานะ-truemoney-status-codes)
 - [คู่มือการนำไปทำระบบเติมเงินอัตโนมัติ (Automated Payment Flow)](#-คู่มือการนำไปทำระบบเติมเงินอัตโนมัติ-automated-payment-flow)
 - [การติดตั้งและรัน Local](#-การติดตั้งและรัน-local)
-- [ขั้นตอนการ Deploy ขึ้น Vercel (Singapore sin1)](#-ขั้นตอนการ-deploy-ขึ้น-vercel-singapore-sin1)
+- [ขั้นตอนการ Deploy ขึ้น Vercel (iad1)](#-ขั้นตอนการ-deploy-ขึ้น-vercel-iad1)
 - [ข้อจำกัดความรับผิดชอบและสัญญาอนุญาต (Disclaimer & License)](#-ข้อจำกัดความรับผิดชอบและสัญญาอนุญาต)
 
 ---
@@ -43,7 +43,7 @@ sequenceDiagram
     autonumber
     actor Client as ผู้ใช้ / เว็บเติมเงิน
     participant API as TrueMoney Voucher API (FastAPI)
-    participant Engine as curl_cffi (Chrome 124 TLS)
+    participant Engine as curl_cffi (Firefox 147 TLS)
     participant CF as Cloudflare Protection
     participant TM as TrueMoney Wallet Server
 
@@ -51,7 +51,7 @@ sequenceDiagram
     Note over API: ตรวจสอบความถูกต้องของเบอร์โทร & สกัด Voucher Hash
     API->>Engine: สร้าง TLS Handshake (JA3/JA4 + HTTP/2)
     Engine->>CF: ส่งคำขอไปยัง gift.truemoney.com
-    CF-->>Engine: ตรวจสอบ Fingerprint ผ่านฉลุย (เลียนแบบ Chrome 100%)
+    CF-->>Engine: ตรวจสอบ Fingerprint ผ่านฉลุย (เลียนแบบ Firefox 100%)
     Engine->>TM: ร้องขอข้อมูลซอง / กดรับเงินเข้าบัญชีจริง
     TM-->>Engine: คืนผลลัพธ์ JSON (Status Code + ยอดเงิน)
     Engine-->>API: ส่งต่อข้อมูล
@@ -63,8 +63,9 @@ sequenceDiagram
 
 ## ✨ จุดเด่นและคุณสมบัติหลัก
 
-* 🛡️ **Bypass Cloudflare สมบูรณ์แบบ:** จำลอง TLS Fingerprint (JA3/JA4) และ HTTP/2 Header สเปกเดียวกับ Google Chrome 124 ข้ามหน้าตรวจจับบอตได้ 100%
-* ⚡ **Vercel Serverless Ready:** ตั้งค่าภูมิภาคสิงคโปร์ (`sin1`) ล่วงหน้าใน `vercel.json` ลาเทนซีต่ำเพียง 20–30ms ไม่ต้องมีเซิร์ฟเวอร์ส่วนตัว
+* 🛡️ **Bypass Cloudflare สมบูรณ์แบบ:** จำลอง TLS Fingerprint (JA3/JA4) และ HTTP/2 Header สเปกเดียวกับ Mozilla Firefox 147 ข้ามหน้าตรวจจับบอต Cloudflare ได้ 100%
+* ⚡ **Vercel Serverless Ready:** ตั้งค่าภูมิภาค Washington D.C. (`iad1`) ล่วงหน้าใน `vercel.json` ปลอดภัยจากการบล็อก IP ทำงานได้ 24/7 ไม่ต้องมีเซิร์ฟเวอร์ส่วนตัว
+
 * 🔄 **Dual Method Support:** รองรับทั้ง `POST` (JSON Body ปลอดภัยสูง) และ `GET` (URL Path สะดวก รวดเร็ว)
 * 🧠 **Smart Parameter Resolver:** สลับตำแหน่งให้อัตโนมัติ หากส่งเบอร์โทรมาก่อนรหัสซอง หรือส่งรหัสซองมาก่อนเบอร์โทร
 * 🇹🇭 **Native Thai Messages:** มีระบบแปลรหัสสถานะของ TrueMoney เช่น `VOUCHER_EXPIRED`, `VOUCHER_OUT_OF_STOCK` เป็นภาษาไทย (`message_th`) ในตัว
@@ -260,7 +261,7 @@ curl -X GET http://localhost:8000/truemoney/01a0c04029fe748aa3703ab162f3d24bfdq/
   "status": "ok",
   "powered_by": "equalsignorecase",
   "engine": "curl_cffi",
-  "impersonate": "chrome124",
+  "impersonate": "firefox147",
   "python_version": "3.14.7"
 }
 ```
@@ -340,9 +341,9 @@ python3 main.py
 
 ---
 
-## 🚀 ขั้นตอนการ Deploy ขึ้น Vercel (Singapore sin1)
+## 🚀 ขั้นตอนการ Deploy ขึ้น Vercel (iad1)
 
-โปรเจกต์นี้ตั้งค่า [`vercel.json`](file:///Users/user/Desktop/truewallet-api/vercel.json) กำหนดโซนไปที่ **Singapore (`sin1`)** ให้เรียบร้อยแล้ว:
+โปรเจกต์นี้ตั้งค่า [`vercel.json`](file:///Users/user/Desktop/truewallet-api/vercel.json) กำหนดโซนไปที่ **US East (`iad1`)** และใช้ `builds` + `routes` ให้เรียบร้อยแล้ว:
 
 1. **บันทึกโค้ดและส่งขึ้น GitHub:**
    ```bash
